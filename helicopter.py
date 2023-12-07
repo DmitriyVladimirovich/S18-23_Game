@@ -19,7 +19,7 @@ class Helicopter():
         if (nx>=0 and ny>=0 and nx<self.h and ny<self.w):
             self.x,self.y=nx,ny
             
-    def print_ststs(self):
+    def print_stats(self):
         print('wt',self.tank,'/',self.mxtank,sep='',end=' | ')
         print('score',self.score,end=' | ')
         print('lives',self.lives)

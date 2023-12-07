@@ -1,13 +1,16 @@
+﻿
 from utils import *
-import os
-# 0-����
-# 1-��ॢ�
-# 2-४�
-# 3-��ᯨ⠫�
-# 4-�����
-# 5-�����
 
-CELL_TYPES='gtwrsf'
+import os
+
+# 0-Ї®«Ґ
+# 1-¤ҐаҐў®
+# 2-аҐЄ 
+# 3-Ј®бЇЁв «м
+# 4-¬ Ј §
+# 5-Ї®¦ а
+
+CELL_TYPES='🟩🌴🌊🆘🏪🔥'
 TREE_BONUS=10
 UPGRADE_COST=500
 LIFE_COST=1000
@@ -15,12 +18,12 @@ LIFE_COST=1000
 class Map:
 	
     def __init__(self,w,h):
-		self.w=w
-		self.h=h
-		self.cells=[[0 for i in range(w)] for j in range(h)]
+        self.w=w
+        self.h=h
+        self.cells=[[0 for i in range(w)] for j in range(h)]
         self.generate_forest(3,10)
-        self.generate_river(10)
-        self.generate_river(15)
+        self.generate_rivers(10)
+        self.generate_rivers(15)
         self.generate_upgrade_shop()
         self.generate_hospital()
     
@@ -39,14 +42,14 @@ class Map:
     def generate_tree(self):
         c=randcell(self.w,self.h)
         cx,cy=c[0],c[1]
-        if (selfcells[cx][cy]==0)
+        if (self.cells[cx][cy]==0):
             self.cells[cx][cy]=1
         
-	def generate_forest(self,r,mxr):
+    def generate_forest(self,r,mxr):
         for ri in range(self.h):
             for ci in range(self.w):
                 if randbool(r,mxr):
-                    self.cells[ri][ci]=1
+                     self.cells[ri][ci]=1
 	
     def generate_upgrade_shop(self):
         c=randcell(self.w,self.h)
@@ -56,27 +59,27 @@ class Map:
     def generate_hospital(self):
         c=randcell(self.w,self.h)
         cx,cy=c[0],c[1]
-        if elf.cells[cx][cy]!=4
+        if self.cells[cx][cy]!=4:
             self.cells[cx][cy]=3
         else:
             self.generate_hospital()
     
-	def print_map(self,helc,clouds):
-		print('*'*(self.w+2))
-		for ri in range(self.h):
-			print('*', end='')
-			for ci in range(self.w):
+    def print_map(self,helc,clouds):
+        print('⬛'*(self.w+2))
+        for ri in range(self.h):
+            print('⬛', end='')
+            for ci in range(self.w):
                 cell=self.cells[ri][ci]
-                if (clouds.cells[ri],[ci]==1):
-                    print('c',end='')
-                elif (clouds.cells[ri],[ci]==2):
-                    print('e',end='')
+                if (clouds.cells[ri][ci]==1):
+                    print('☁️',end='')
+                elif (clouds.cells[ri][ci]==2):
+                    print('⛈️',end='')
                 elif (helc.x==ri and helc.y==ci):
-                    print('h',end='')
-				elif (cell>=0 and cell<len(CELL_TYPES)):
-					print(CELL_TYPES[cell], end='')
-			print('*')
-		print('*'*(self.w+2))
+                    print('🚁',end='')
+                elif (cell>=0 and cell<len(CELL_TYPES)):
+                    print(CELL_TYPES[cell], end='')
+            print('⬛')
+        print('⬛'*(self.w+2))
         
     def add_fire(self):
         c=randcell(self.w,self.h)
@@ -87,26 +90,26 @@ class Map:
     def update_fires(self):
         for ri in range(self.h):
             for ci in range(self.w):
-            cell=self.cellw[ri][ci]
+                cell=self.cells[ri][ci]
             if cell==5:
                 self.cells[ri][ci]=0
         for i in range(5):
             self.add_fire()
 	
-	def check_bounds(self,x,y):
-		if (x<0 or y<0 or x>=self.h or y>=self.w):
-			return False
-		return True
+    def check_bounds(self,x,y):
+        if (x<0 or y<0 or x>=self.h or y>=self.w):
+            return False
+        return True
 	
     def process_helicopter(self,hel,clouds):
-        �=self.cells[hel.x][hel.y]
+        c=self.cells[hel.x][hel.y]
         d=clouds.cells[hel.x][hel.y]
-        if (�==2)
+        if (c==2):
             hel.tank=hel.mxtank
         if (c==5 and hel.tank>0):
             hel.tank-=1
             hel.score+=TREE_BONUS
-            c=1
+            self.cells[hel.x][hel.y]=1
         if (c==4 and hel.score>=UPGRADE_COST):
             hel.mxtank+=1
             hel.score-=UPGRADE_COST
@@ -116,8 +119,8 @@ class Map:
         if d==2:
             hel.lives-=1
             if hel.lives==0:
-                print('Game over, score:',hel.score)
                 os.system('cls')
+                print('Game over, score:',hel.score)
                 exit(0)
                 
     def export_data(self):
